@@ -80,20 +80,28 @@
 
       <!-- Modal body -->
       <div class="modal-body">
-         <form class="pt-8 px-6 pb-6">
-          <h1 class="text-black font-bold text-xl mb-1">Upload Berkas</h1>
-          <p class="text-black text-sm mb-6">Pastikan format file .pdf</p>
-      <label for="file-upload" class="block text-black text-xs mb-2 font-normal">Upload File Berkas</label>
-      <div class="flex items-center space-x-3 mb-10">
-        <input id="file-upload" type="text" readonly placeholder="" class="flex-grow border border-gray-300 rounded-md h-9 px-3 text-xs text-black focus:outline-none" />
-        <button type="button" class="bg-gray-300 text-gray-600 text-[9px] font-normal h-9 px-4 rounded-md">
-          Browse
-        </button>
-      </div>
-      <button type="submit"class="w-full bg-gray-300 text-gray-600 text-[9px] font-normal h-9 rounded-md"> 
-        Submit
-      </button>
-    </form>
+         <div class="pt-8 px-6 pb-6">
+               <form action="{{ route('files.store') }}" method="POST" enctype="multipart/form-data">
+
+                            @csrf
+
+                            <div class="form-group mb-3">
+                                <label class="font-weight-bold">File</label>
+                                <input type="file" class="form-control @error('file') is-invalid @enderror" name="file">
+
+                                <!-- error message untuk image -->
+                                @error('file')
+                                    <div class="alert alert-danger mt-2">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+
+                            <button type="submit" class="btn btn-md btn-primary me-3">Upload</button>
+
+                        </form> 
+      
+         </div>
       </div>
     </div>
   </div>
@@ -107,140 +115,30 @@
     </form>
    </div>
    
-   <table class="w-full border-collapse">
-    <thead class="bg-gray-100 text-black font-semibold text-sm">
-     <tr>
-      <th class="text-left px-4 py-2">
-       No
-      </th>
-      <th class="text-left px-4 py-2">
-       Nama Berkas
-      </th>
-      <th class="text-left px-4 py-2">
-       Action
-      </th>
-     </tr>
-    </thead>
-    <tbody>
-     <tr class="bg-sky-300">
-      <td class="font-bold px-4 py-3">
-       1
-      </td>
-      <td class="px-4 py-3 text-sm">
-       25000100_AGUS_PERMOHONAN.pdf
-      </td>
-      <td class="px-4 py-3">
-       <a href="/view"><button class="bg-sky-500 hover:bg-sky-600 text-white rounded px-4 py-1 text-sm font-medium" type="button">
-        Open
-       </button></a>
-      </td>
-     </tr>
-     <tr>
-      <td class="font-bold px-4 py-3">
-       2
-      </td>
-      <td class="px-4 py-3 text-sm">
-       25000100_AGUS_SLIK.pdf
-      </td>
-      <td class="px-4 py-3">
-       <button class="bg-sky-500 hover:bg-sky-600 text-white rounded px-4 py-1 text-sm font-medium" type="button">
-        Open
-       </button>
-      </td>
-     </tr>
-     <tr class="bg-sky-300">
-      <td class="font-bold px-4 py-3">
-       3
-      </td>
-      <td class="px-4 py-3 text-sm">
-       25000100_AGUS_PK.pdf
-      </td>
-      <td class="px-4 py-3">
-       <button class="bg-sky-500 hover:bg-sky-600 text-white rounded px-4 py-1 text-sm font-medium" type="button">
-        Open
-       </button>
-      </td>
-     </tr>
-     <tr>
-      <td class="font-bold px-4 py-3">
-       4
-      </td>
-      <td class="px-4 py-3 text-sm">
-       25000101_BUDI_PERMOHONAN.pdf
-      </td>
-      <td class="px-4 py-3">
-       <button class="bg-sky-500 hover:bg-sky-600 text-white rounded px-4 py-1 text-sm font-medium" type="button">
-        Open
-       </button>
-      </td>
-     </tr>
-     <tr class="bg-sky-300">
-      <td class="font-bold px-4 py-3">
-       5
-      </td>
-      <td class="px-4 py-3 text-sm">
-       25000101_BUDI_SLIK.pdf
-      </td>
-      <td class="px-4 py-3">
-       <button class="bg-sky-500 hover:bg-sky-600 text-white rounded px-4 py-1 text-sm font-medium" type="button">
-        Open
-       </button>
-      </td>
-     </tr>
-     <tr>
-      <td class="font-bold px-4 py-3">
-       6
-      </td>
-      <td class="px-4 py-3 text-sm">
-       25000101_BUDI_PK.pdf
-      </td>
-      <td class="px-4 py-3">
-       <button class="bg-sky-500 hover:bg-sky-600 text-white rounded px-4 py-1 text-sm font-medium" type="button">
-        Open
-       </button>
-      </td>
-     </tr>
-     <tr class="bg-sky-300">
-      <td class="font-bold px-4 py-3">
-       7
-      </td>
-      <td class="px-4 py-3 text-sm">
-       25000102_JOKO_PERMOHONAN.pdf
-      </td>
-      <td class="px-4 py-3">
-       <button class="bg-sky-500 hover:bg-sky-600 text-white rounded px-4 py-1 text-sm font-medium" type="button">
-        Open
-       </button>
-      </td>
-     </tr>
-     <tr>
-      <td class="font-bold px-4 py-3">
-       8
-      </td>
-      <td class="px-4 py-3 text-sm">
-       25000102_JOKO_SLIK.pdf
-      </td>
-      <td class="px-4 py-3">
-       <button class="bg-sky-500 hover:bg-sky-600 text-white rounded px-4 py-1 text-sm font-medium" type="button">
-        Open
-       </button>
-      </td>
-     </tr>
-     <tr class="bg-sky-300">
-      <td class="font-bold px-4 py-3">
-       9
-      </td>
-      <td class="px-4 py-3 text-sm">
-       25000102_JOKO_PK.pdf
-      </td>
-      <td class="px-4 py-3">
-       <button class="bg-sky-500 hover:bg-sky-600 text-white rounded px-4 py-1 text-sm font-medium" type="button">
-        Open
-       </button>
-      </td>
-     </tr>
-    </tbody>
-   </table><br>
+    <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Nama File</th>
+                                    <th scope="col" style="width: 20%">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($files as $file)
+                                    <tr>
+                                        <td>{{ $file->original_name }}</td>
+                                        <td class="text-center">
+                                        <a href="{{ route('files.download', $file) }}" class="btn btn-sm btn-primary">Download</a>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="2" class="text-muted text-center">Data file belum tersedia</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                        {{ $files->links() }}
+                        <br>
     <div class="flex flex-col flex-row-reverse"">
     <ul class="pagination">
     <li class="page-item"><a class="page-link" href="#">Previous</a></li>
