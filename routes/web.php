@@ -1,22 +1,24 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DaftarBerkasController;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\FileController;
+use App\Http\Controllers\PDFController;
 use App\Http\Controllers\ViewPageController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
-//Route::get('/daftar', [DaftarBerkasController::class, 'daftarberkaspage'])->name('daftar');
-Route::get('/view', [ViewPageController::class, 'indexview'])->name('view');
+//  Route::get('/documents', [DaftarBerkasController::class, 'index'])->name('documents.index');
+// Route::get('/view', [ViewPageController::class, 'indexview'])->name('view');
 
-Route::get('/files', [App\Http\Controllers\FileController::class, 'index'])
-    ->name('files.index');
+Route::resource('documents', DocumentController::class);
+Route::get('/documents/{document}/download', [DocumentController::class, 'download'])->name('documents.download');
+// Route::get('/documents/{document}', [DocumentController::class, 'show'])->name('documents.show');
 
-Route::post('/files/create', [App\Http\Controllers\FileController::class, 'create'])
-    ->name('files.create');
+Route::get('/view-pdf/{id}', function ($id) {
+    return view('indexview', ['id' => $id]);
+});
 
-Route::post('/files/store', [App\Http\Controllers\FileController::class, 'store'])
-    ->name('files.store');
 
-Route::get('/files/{file}/download', [App\Http\Controllers\FileController::class, 'download'])
-    ->name('files.download');
+

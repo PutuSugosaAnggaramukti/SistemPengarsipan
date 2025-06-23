@@ -81,26 +81,14 @@
       <!-- Modal body -->
       <div class="modal-body">
          <div class="pt-8 px-6 pb-6">
-               <form action="{{ route('files.store') }}" method="POST" enctype="multipart/form-data">
+          <h1>Upload PDF</h1>
 
-                            @csrf
-
-                            <div class="form-group mb-3">
-                                <label class="font-weight-bold">File</label>
-                                <input type="file" class="form-control @error('file') is-invalid @enderror" name="file">
-
-                                <!-- error message untuk image -->
-                                @error('file')
-                                    <div class="alert alert-danger mt-2">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
-
-                            <button type="submit" class="btn btn-md btn-primary me-3">Upload</button>
-
-                        </form> 
-      
+<form action="{{ route('documents.store') }}" method="POST" enctype="multipart/form-data">
+    @csrf
+    <input type="text" name="title" placeholder="Title" required><br><br>
+    <input type="file" name="pdf" accept="application/pdf" required><br><br>
+    <button class="btn btn-sm btn-primary" type="submit">Upload</button>
+</form>
          </div>
       </div>
     </div>
@@ -115,29 +103,35 @@
     </form>
    </div>
    
-    <table class="table table-bordered">
-                            <thead>
+    <table class="table">
+                            
                                 <tr>
-                                    <th scope="col">Nama File</th>
-                                    <th scope="col" style="width: 20%">Action</th>
+                                   
+                                    <th class="text-center">Nama File</th>
+                                    <th class="text-center">Action</th>
                                 </tr>
-                            </thead>
+                           
                             <tbody>
-                                @forelse ($files as $file)
+                              @foreach($documents as $doc)
                                     <tr>
-                                        <td>{{ $file->original_name }}</td>
+                                        
+                                        <td class="text-center">{{$doc->title}}</td>
                                         <td class="text-center">
-                                        <a href="{{ route('files.download', $file) }}" class="btn btn-sm btn-primary">Download</a>
+                                        <a href="" class="btn btn-sm btn-primary">Download</a>
+                                        <a href="{{asset('storage/' . $doc->file_path)}}" target="_blank" class="btn btn-sm btn-secondary">Preview</a>
+                                         <form action="{{ route('documents.destroy', $doc->id) }}" method="POST" style="display:inline">
+            @csrf
+            @method('DELETE')
+            <button class="btn btn-sm btn-danger" type="submit">Delete</button>
+        </form>
                                         </td>
                                     </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="2" class="text-muted text-center">Data file belum tersedia</td>
-                                    </tr>
-                                @endforelse
+                               @endforeach
+                                    
+                            
                             </tbody>
                         </table>
-                        {{ $files->links() }}
+                     
                         <br>
     <div class="flex flex-col flex-row-reverse"">
     <ul class="pagination">

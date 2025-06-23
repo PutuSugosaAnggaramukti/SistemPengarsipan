@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-       Schema::create('files', function (Blueprint $table) {
-            $table->id();
-            $table->string('original_name');
-            $table->string('generated_name');
-            $table->timestamps();
-        }); 
+    Schema::create('documents', function (Blueprint $table) {
+        $table->id();
+        $table->string('title');
+        $table->string('file_path');
+        $table->timestamps();
+    });
     }
 
     /**
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('files');
+        Schema::dropIfExists('documents');
     }
 };

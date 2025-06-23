@@ -12,6 +12,7 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  
   <link href="https://fonts.googleapis.com/css2?family=Inter&amp;display=swap" rel="stylesheet"/>
   <style>
    body {
@@ -40,11 +41,14 @@
     </span>
    </button>
   </header>
+  
    <h1 class="text-center font-extrabold text-xl mb-6">
     View Berkas
    </h1>
    
+   
   <main class="px-6">
+    <div id="my-pdf"></div>
   <!-- Modal Logout View Berkas-->
 <div class="modal" id="logoutModal">
   <div class="modal-dialog modal-dialog-centered">
@@ -63,28 +67,7 @@
     </div>
   </div>
 </div>
-<div class="container p-5 my-5 bg-dark">
-  <div class="flex justify-between items-center mb-6">
-    <a href="/daftar"><button class="bg-sky-300 text-blue-700 font-semibold rounded-md px-6 py-2 shadow-md hover:shadow-lg transition-shadow">
-     Back
-    </button></a>
-    <div class="flex space-x-3">
-     <button aria-label="Download" class="bg-sky-300 text-blue-700 rounded-md p-2 shadow-md hover:shadow-lg transition-shadow">
-      <i class="fas fa-download">
-      </i>
-     </button>
-     <button aria-label="Print" class="bg-sky-300 text-blue-700 rounded-md p-2 shadow-md hover:shadow-lg transition-shadow" data-bs-toggle="modal" data-bs-target="#printModal" type="button">
-      <i class="fas fa-print">
-      </i>
-     </button>
-     <button aria-label="Delete" class="bg-sky-300 text-blue-700 rounded-md p-2 shadow-md hover:shadow-lg transition-shadow" data-bs-toggle="modal" data-bs-target="#myModal" type="button">
-      <i class="fas fa-trash">
-      </i>
-     </button>
-    </div>
-   </div>
-</div>
-
+  <iframe src="{{ url('/view-pdf/' . $id) }}" width="100%" height="600px"></iframe>
 <!-- Modal Print Berkas -->
 <div class="modal" id="printModal">
   <div class="modal-dialog modal-dialog-centered">
@@ -130,4 +113,10 @@
 </div>
   </main>
  </body>
+
+
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+<script>
+  $("#")
+</script>
 </html>
