@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\DaftarBerkasController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\ViewPageController;
 use Illuminate\Support\Facades\Auth;
@@ -29,5 +29,16 @@ Route::get('/files/{file}/download', [App\Http\Controllers\FileController::class
 
 Route::delete('/documents/{id}', [FileController::class, 'destroy'])->name('files.destroy');
 
+
+// Show the login form
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+
+// Handle login submission
+Route::post('/login', [LoginController::class, 'login']);
+
+Route::post('/logout', function () {
+    Auth::logout();
+    return redirect('/login');
+})->name('logout');
 
 

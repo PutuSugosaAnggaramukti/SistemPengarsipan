@@ -17,7 +17,7 @@ class FileController
     {
         $search = $request->input('search');
 
-    $files = File::query()
+        $files = File::query()
         ->when($search, function ($query, $search) {
             $query->where('original_name', 'like', "%{$search}%")
                   ->orWhere('generated_name', 'like', "%{$search}%");
@@ -25,7 +25,7 @@ class FileController
         ->orderBy('created_at', 'desc')
         ->paginate(10); // Optional: for pagination
 
-        $files = File::latest()->paginate(10);
+       $files = File::where('original_name', 'like', "%{$search}%")->paginate(10);
         return view('files.index', compact('files','search'));
     }
 

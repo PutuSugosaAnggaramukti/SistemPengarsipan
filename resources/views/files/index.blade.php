@@ -27,13 +27,32 @@ function confirmDelete(id) {
         showCancelButton: true,
         confirmButtonColor: '#d33',
         cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Ya'
+        confirmButtonText: 'Ya',
+        cancelButtonText: 'Batal'
     }).then((result) => {
         if (result.isConfirmed) {
             document.getElementById('delete-form-' + id).submit();
         }
     })
 }
+function confirmLogout(event) {
+    event.preventDefault();
+
+    Swal.fire({
+        title: 'Logout?',
+        text: "Yakin ingin keluar?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Ya, Logout',
+        cancelButtonText: 'Batal'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('logout-form').submit();
+        }
+    });
+} 
 </script> 
  </head>
  <body class="bg-white text-black">
@@ -49,13 +68,16 @@ function confirmDelete(id) {
      </p>
     </div>
    </div>
-   <button class="flex items-center space-x-2 bg-sky-300 hover:bg-sky-400 text-sky-700 rounded-full px-4 py-2 shadow-md text-sm font-medium" data-bs-toggle="modal" data-bs-target="#logoutModal" type="button">
+  <form id="logout-form" action="" method="POST" style="display: none;">
+    @csrf
+</form>
+<a href="#" onclick="confirmLogout(event)"><button class="flex items-center space-x-2 bg-sky-300 hover:bg-sky-400 text-sky-700 rounded-full px-4 py-2 shadow-md text-sm font-medium" type="button">
     <i class="fas fa-sign-out-alt">
     </i>
     <span>
      Logout
     </span>
-   </button>
+   </button></a>
   </header>
   <main class="px-6">
    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
@@ -66,25 +88,7 @@ function confirmDelete(id) {
       Upload Berkas
      </span>
     </button>
-    <!-- Modal Logout Daftar Berkas-->
-<div class="modal" id="logoutModal">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-
-      <!-- Modal body -->
-      <div class="modal-body">
-        <h1 class="font-bold text-black text-xl mb-10">Yakin ingin keluar?</h1>
-      </div>
-
-      <!-- Modal footer -->
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary">Ya</button>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tidak</button>
-      </div>
-    </div>
-  </div>
-</div>
-
+   
     <!-- Modal Upload Berkas  -->
 <div class="modal fade" id="myModal">
   <div class="modal-dialog modal-dialog-centered">
