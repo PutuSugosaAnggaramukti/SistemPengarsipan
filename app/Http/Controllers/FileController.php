@@ -13,10 +13,20 @@ class FileController
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $search = $request->input('search');
+
+    $files = File::query()
+        ->when($search, function ($query, $search) {
+            $query->where('original_name', 'like', "%{$search}%")
+                  ->orWhere('generated_name', 'like', "%{$search}%");
+        })
+        ->orderBy('created_at', 'desc')
+        ->paginate(10); // Optional: for pagination
+
         $files = File::latest()->paginate(10);
-        return view('files.index', compact('files'));
+        return view('files.index', compact('files','search'));
     }
 
     public function indexview()

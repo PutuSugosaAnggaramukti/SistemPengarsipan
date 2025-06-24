@@ -124,13 +124,11 @@ function confirmDelete(id) {
     </div>
   </div>
 </div>
-    <form class="relative w-full max-w-xs">
-     <input class="w-full rounded-full border border-gray-300 py-2 pl-4 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Search.." type="search"/>
-     <button aria-label="Search" class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700" type="submit">
-      <i class="fas fa-search">
-      </i>
-     </button>
-    </form>
+
+    <form action="{{ route('files.index') }}" method="GET" class="mb-3 d-flex" role="search">
+    <input type="text" name="search" value="{{ request('search') }}" class="form-control me-2" placeholder="Search files...">
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
    </div>
    
     <table class="table">
@@ -155,6 +153,7 @@ function confirmDelete(id) {
                                          <button type="button" class="btn btn-sm btn-danger" onclick="confirmDelete({{ $file->id }})">Delete</button>
                                         </form>
                                         </td>
+                                        
                                     </tr>
                                @endforeach
                                     
