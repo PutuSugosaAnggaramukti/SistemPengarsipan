@@ -6,8 +6,8 @@
   <title>
    Sistem Informasi Pengarsipan
   </title>
-  <script src="https://cdn.tailwindcss.com">
-  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link href="images/logo.png" rel="icon">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -18,6 +18,23 @@
       font-family: 'Inter', sans-serif;
     }
   </style>
+  <script>
+function confirmDelete(id) {
+    Swal.fire({
+        title: 'Yakin ingin menghapus?',
+        text: "File anda akan terhapus secara permanen!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Ya'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('delete-form-' + id).submit();
+        }
+    })
+}
+</script> 
  </head>
  <body class="bg-white text-black">
   <header class="flex items-center justify-between px-6 py-4">
@@ -83,12 +100,25 @@
          <div class="pt-8 px-6 pb-6">
           <h1>Upload PDF</h1>
 
-<form action="{{ route('documents.store') }}" method="POST" enctype="multipart/form-data">
-    @csrf
-    <input type="text" name="title" placeholder="Title" required><br><br>
-    <input type="file" name="pdf" accept="application/pdf" required><br><br>
-    <button class="btn btn-sm btn-primary" type="submit">Upload</button>
-</form>
+ <form action="{{ route('files.store') }}" method="POST" enctype="multipart/form-data">
+
+                            @csrf
+
+                            <div class="form-group mb-3">
+                                <label class="font-weight-bold">File</label>
+                                <input type="file" class="form-control @error('file') is-invalid @enderror" name="file">
+
+                                <!-- error message untuk image -->
+                                @error('file')
+                                    <div class="alert alert-danger mt-2">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+
+                            <button type="submit" class="btn btn-md btn-primary me-3">Upload</button>
+
+                        </form> 
          </div>
       </div>
     </div>
@@ -112,18 +142,18 @@
                                 </tr>
                            
                             <tbody>
-                              @foreach($documents as $doc)
+                              @forelse ($files as $file)
                                     <tr>
                                         
-                                        <td class="text-center">{{$doc->title}}</td>
+                                        <td class="text-center">{{$file->original_name}}</td>
                                         <td class="text-center">
-                                        <a href="" class="btn btn-sm btn-primary">Download</a>
-                                        <a href="{{asset('storage/' . $doc->file_path)}}" target="_blank" class="btn btn-sm btn-secondary">Preview</a>
-                                         <form action="{{ route('documents.destroy', $doc->id) }}" method="POST" style="display:inline">
-            @csrf
-            @method('DELETE')
-            <button class="btn btn-sm btn-danger" type="submit">Delete</button>
-        </form>
+                                        <a href="{{ route('files.download', $file) }}" class="btn btn-sm btn-primary">Download</a>
+                                        <a href="{{ route('files.show', $file->id)}}" target="_blank" class="btn btn-sm btn-secondary">Preview</a>
+                                        <form id="delete-form-{{ $file->id }}" action="{{route('files.destroy', $file->id)}}" method="POST" style="display:inline">
+                                 @csrf
+                                 @method('DELETE')
+                                         <button type="button" class="btn btn-sm btn-danger" onclick="confirmDelete({{ $file->id }})">Delete</button>
+                                        </form>
                                         </td>
                                     </tr>
                                @endforeach
@@ -131,7 +161,7 @@
                             
                             </tbody>
                         </table>
-                     
+                      {{ $files->links() }}
                         <br>
     <div class="flex flex-col flex-row-reverse"">
     <ul class="pagination">

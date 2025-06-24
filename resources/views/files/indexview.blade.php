@@ -67,7 +67,7 @@
     </div>
   </div>
 </div>
-  <iframe src="{{ url('/view-pdf/' . $id) }}" width="100%" height="600px"></iframe>
+  <iframe src="{{ asset('storage/' . $file->file_path) }}" width="100%" height="600px"></iframe>
 <!-- Modal Print Berkas -->
 <div class="modal" id="printModal">
   <div class="modal-dialog modal-dialog-centered">
