@@ -48,7 +48,8 @@ class FileController
     public function store(Request $request)
     {
          $request->validate([
-        'file' => 'required|mimes:pdf,docx|max:2048',
+        'file' => 'required|mimes:pdf,docx|max:2048',], [
+        'file.max' => 'The file is too large. Maximum size is 2MB.',
     ]);
 
     $uploadedFile = $request->file('file');

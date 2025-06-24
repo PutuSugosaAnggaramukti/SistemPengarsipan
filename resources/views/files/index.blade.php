@@ -119,6 +119,16 @@ function confirmLogout(event) {
                                     </div>
                                 @enderror
                             </div>
+                            @if ($errors->has('file'))
+    <script>
+        Swal.fire({
+            icon: 'warning',
+            title: 'File too large!',
+            text: '{{ $errors->first('file') }}'
+        });
+    </script>
+@endif
+                            
 
                             <button type="submit" class="btn btn-md btn-primary me-3">Upload</button>
 
