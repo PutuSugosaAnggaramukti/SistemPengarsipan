@@ -4,7 +4,7 @@
   <meta charset="utf-8"/>
   <meta content="width=device-width, initial-scale=1" name="viewport"/>
   <title>
-  View Berkas
+Sistem Informasi Pengarsipan | Login
   </title>
   <script src="https://cdn.tailwindcss.com">
   </script>
@@ -46,6 +46,11 @@
       </span>
      </button>
     </div>
+    @if ($errors->has('login_error'))
+    <div class="alert alert-danger">
+        {{ $errors->first('login_error') }}
+    </div>
+    @endif
    </form>
    <div class="text-center">
     <a class="text-sm underline" href="#">

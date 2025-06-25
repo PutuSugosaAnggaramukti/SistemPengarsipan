@@ -15,12 +15,14 @@ class LoginController
 
 public function login(Request $request)
 {
-    $credentials = $request->only('username', 'password');
+   $credentials = $request->only('username', 'password');
 
-    if (Auth::attempt($credentials)) {
-        return redirect()->intended('/files'); // or home
-    }
+if (Auth::attempt($credentials)) {
+    return redirect()->intended('dashboard');
+}
 
-    return back()->withErrors(['username' => 'Invalid credentials']);
+return back()->withErrors([
+    'login_error' => 'Incorrect username or password.',
+]);
 }
 }

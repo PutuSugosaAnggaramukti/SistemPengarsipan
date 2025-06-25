@@ -81,6 +81,7 @@ function confirmLogout(event) {
   </header>
   <main class="px-6">
    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+    <section class="px-6 pb-6 flex flex-wrap gap-3">
     <button class="flex items-center space-x-2 bg-indigo-700 hover:bg-indigo-800 text-white rounded-full px-5 py-2 text-sm font-medium shadow-md" data-bs-toggle="modal" data-bs-target="#myModal" type="button">
      <i class="fas fa-upload">
      </i>
@@ -88,6 +89,10 @@ function confirmLogout(event) {
       Upload Berkas
      </span>
     </button>
+    <button class="flex items-center space-x-2 bg-indigo-700 hover:bg-indigo-800 text-white rounded-full px-5 py-2 text-sm font-medium shadow-md " type="button">
+    Kembali
+   </button>
+    </section>
    
     <!-- Modal Upload Berkas  -->
 <div class="modal fade" id="myModal">
@@ -96,13 +101,14 @@ function confirmLogout(event) {
 
       <!-- Modal Header -->
       <div class="modal-header">
+        <h1>Upload PDF</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
 
       <!-- Modal body -->
       <div class="modal-body">
          <div class="pt-8 px-6 pb-6">
-          <h1>Upload PDF</h1>
+          <h1>Maksimal file 200MB</h1>
 
  <form action="{{ route('files.store') }}" method="POST" enctype="multipart/form-data">
 
@@ -150,6 +156,7 @@ function confirmLogout(event) {
                                 <tr>
                                    
                                     <th class="text-center">Nama File</th>
+                                    <th class="text-center">Tanggal Upload</th>
                                     <th class="text-center">Action</th>
                                 </tr>
                            
@@ -158,6 +165,7 @@ function confirmLogout(event) {
                                     <tr>
                                         
                                         <td class="text-center">{{$file->original_name}}</td>
+                                        <td class="text-center">{{$file->created_at}}</td>
                                         <td class="text-center">
                                         <a href="{{ route('files.download', $file) }}" class="btn btn-sm btn-primary">Download</a>
                                         <a href="{{ route('files.show', $file->id)}}" target="_blank" class="btn btn-sm btn-secondary">Preview</a>
@@ -176,7 +184,7 @@ function confirmLogout(event) {
                         </table>
                       {{ $files->links() }}
                         <br>
-    <div class="flex flex-col flex-row-reverse"">
+    {{-- <div class="flex flex-col flex-row-reverse"">
     <ul class="pagination">
     <li class="page-item"><a class="page-link" href="#">Previous</a></li>
     <li class="page-item"><a class="page-link" href="#">1</a></li>
@@ -184,7 +192,7 @@ function confirmLogout(event) {
     <li class="page-item"><a class="page-link" href="#">3</a></li>
     <li class="page-item"><a class="page-link" href="#">Next</a></li>
   </ul>
-    </div><br>
+    </div><br> --}}
   </main>
  </body>
 </html>

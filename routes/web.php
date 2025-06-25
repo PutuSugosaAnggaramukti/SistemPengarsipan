@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 
 //  Route::get('/documents', [DaftarBerkasController::class, 'index'])->name('documents.index');
 Route::get('/view', [ViewPageController::class, 'indexview'])->name('view');
+Route::get('/daftarberkas', [FileController::class, 'indexdaftarberkas'])->name('files.indexdaftarberkas');
 Route::get('/files/{id}/show', [FileController::class, 'show'])->name('files.show');
 
 Route::get('/files', [App\Http\Controllers\FileController::class, 'index'])
@@ -31,7 +32,7 @@ Route::delete('/documents/{id}', [FileController::class, 'destroy'])->name('file
 
 
 // Show the login form
-Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::get('/', [LoginController::class, 'showLoginForm'])->name('login');
 
 // Handle login submission
 Route::post('/login', [LoginController::class, 'login']);

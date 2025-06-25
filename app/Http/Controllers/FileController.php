@@ -34,6 +34,9 @@ class FileController
         return view('files.indexview');
     }
 
+    public function indexdaftarberkas(){
+        return view('files.indexdaftarberkas');
+    }
     /**
      * Show the form for creating a new resource.
      */
