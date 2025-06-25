@@ -111,22 +111,29 @@ function confirmLogout(event) {
           <h1>Maksimal file 200MB</h1>
 
  <form action="{{ route('files.store') }}" method="POST" enctype="multipart/form-data">
-                           
-   @csrf
-    <label>Year:</label>
-    <input type="number" name="year" min="2000" max="{{ date('Y') }}" required>
 
-    <label>PDF Documents:</label>
-    <input type="file" name="files[]" multiple accept="application/pdf">
-    {{-- <button type="submit">Upload</button> --}}
-    {{-- <script>
+                            @csrf
+
+                            <div class="form-group mb-3">
+                                <label class="font-weight-bold">File</label>
+                                <input type="file" class="form-control @error('file') is-invalid @enderror" name="file">
+
+                                <!-- error message untuk image -->
+                                @error('file')
+                                    <div class="alert alert-danger mt-2">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                            @if ($errors->has('file'))
+    <script>
         Swal.fire({
             icon: 'warning',
             title: 'File too large!',
             text: '{{ $errors->first('file') }}'
         });
-    </script> --}}
-
+    </script>
+@endif
                             
 
                             <button type="submit" class="btn btn-md btn-primary me-3">Upload</button>
@@ -149,35 +156,32 @@ function confirmLogout(event) {
                                 <tr>
                                    
                                     <th class="text-center">Nama File</th>
-                                    <th class="text-center">Tahun</th>
                                     <th class="text-center">Tanggal Upload</th>
                                     <th class="text-center">Action</th>
                                 </tr>
                            
                             <tbody>
-                              @forelse ($files as $file)
+                              
                                     <tr>
                                         
-                                        <td class="text-center">{{$file->original_name}}</td>
-                                        <td class="text-center">{{$file->year}}</td>
-                                        <td class="text-center">{{$file->created_at}}</td>
+                                        <td class="text-center"></td>
+                                        <td class="text-center"></td>
                                         <td class="text-center">
-                                        <a href="{{ route('files.download', $file) }}" class="btn btn-sm btn-primary">Download</a>
-                                        <a href="{{ route('files.show', $file->id)}}" target="_blank" class="btn btn-sm btn-secondary">Preview</a>
-                                        <form id="delete-form-{{ $file->id }}" action="{{route('files.destroy', $file->id)}}" method="POST" style="display:inline">
-                                 @csrf
-                                 @method('DELETE')
-                                         <button type="button" class="btn btn-sm btn-danger" onclick="confirmDelete({{ $file->id }})">Delete</button>
+                                        <a href="" class="btn btn-sm btn-primary">Download</a>
+                                        <a href="" target="_blank" class="btn btn-sm btn-secondary">Preview</a>
+                                        <form id="
+                               
+                                         <button type="button" class="btn btn-sm btn-danger" onclick="">Delete</button>
                                         </form>
                                         </td>
                                         
                                     </tr>
-                               @endforeach
+                            
                                     
                             
                             </tbody>
                         </table>
-                      {{ $files->links() }}
+                    
                         <br>
     {{-- <div class="flex flex-col flex-row-reverse"">
     <ul class="pagination">

@@ -29,9 +29,9 @@ class FileController
         return view('files.index', compact('files','search'));
     }
 
-    public function indexview()
+    public function index2020(Request $request)
     {
-        return view('files.indexview');
+        return view('files.index2020'); // Blade file at resources/views/files/index2020.blade.php
     }
 
     public function indexdaftarberkas(){
@@ -50,23 +50,31 @@ class FileController
      */
     public function store(Request $request)
     {
-         $request->validate([
-        'file' => 'required|mimes:pdf,docx|max:204800',], [
-        'file.max' => 'The file is too large. Maximum size is 200MB.',
+        $request->validate([
+        'year' => 'required|digits:4|integer|min:2000|max:' . now()->year,
+        'files' => 'required',
+        'files.*' => 'mimes:pdf|max:204800',
     ]);
 
-    $uploadedFile = $request->file('file');
-    $fileName = $uploadedFile->hashName(); // auto-generates unique name
+    $year = $request->year;
 
-    // 🔐 Store the file in "storage/app/uploads"
-    $storedPath = $uploadedFile->storeAs('uploads', $fileName); // returns 'uploads/xxxx.pdf'
+    if ($request->hasFile('files')) {
+        foreach ($request->file('files') as $file) {
+            if ($file) {
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $path = $file->storeAs("public/documents/{$year}", $filename);
 
-    // ✅ Save to database
-    $file = File::create([
-        'original_name' => $uploadedFile->getClientOriginalName(),
-        'generated_name' => $fileName,
-        'file_path' => $storedPath, // <=== THIS MUST BE SAVED!
-    ]);
+                File::create([
+                    'original_name' => $file->getClientOriginalName(),
+                    'generated_name' => $filename,
+                    'file_path' => $path,
+                    'year' => $year,
+                ]);
+            }
+        }
+    }
+
+    return back()->with('success', 'PDF documents uploaded successfully.');
 
     // ✅ Debug check
     //dd($file->toArray());

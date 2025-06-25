@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\ViewPageController;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
@@ -13,8 +14,14 @@ Route::get('/view', [ViewPageController::class, 'indexview'])->name('view');
 Route::get('/daftarberkas', [FileController::class, 'indexdaftarberkas'])->name('files.indexdaftarberkas');
 Route::get('/files/{id}/show', [FileController::class, 'show'])->name('files.show');
 
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->name('dashboard.index');
+
 Route::get('/files', [App\Http\Controllers\FileController::class, 'index'])
     ->name('files.index');
+
+Route::get('/files2020', [App\Http\Controllers\FileController::class, 'index2020'])
+    ->name('files.index2020');
 
 Route::get('/files/create', [App\Http\Controllers\FileController::class, 'create'])
     ->name('files.create');
