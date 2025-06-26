@@ -29,10 +29,7 @@ class FileController
         return view('files.index', compact('files','search'));
     }
 
-    public function index2020(Request $request)
-    {
-        return view('files.index2020'); // Blade file at resources/views/files/index2020.blade.php
-    }
+
 
     public function indexdaftarberkas(){
         return view('files.indexdaftarberkas');

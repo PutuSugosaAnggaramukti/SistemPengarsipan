@@ -110,7 +110,7 @@ function confirmLogout(event) {
          <div class="pt-8 px-6 pb-6">
           <h1>Maksimal file 200MB</h1>
 
- <form action="{{ route('files.store2020') }}" method="POST" enctype="multipart/form-data">
+ <form action="{{ route('files.store2021') }}" method="POST" enctype="multipart/form-data">
                            
    @csrf
     <label>Year:</label>
@@ -138,7 +138,7 @@ function confirmLogout(event) {
   </div>
 </div>
 
-    <form action="{{ route('files.index2020') }}" method="GET" class="mb-3 d-flex" role="search">
+    <form action="{{ route('files.index2021') }}" method="GET" class="mb-3 d-flex" role="search">
     <input type="text" name="search" value="{{ request('search') }}" class="form-control me-2" placeholder="Search files...">
     <button type="submit" class="btn btn-primary">Search</button>
 </form>
@@ -154,13 +154,13 @@ function confirmLogout(event) {
                             <tbody>
                               @forelse ($files as $file)
                                     <tr>
-                                        <td class="text-center">{{$file->original_name}}</td>
-                                        <td class="text-center">{{$file->year}}</td>
-                                        <td class="text-center">{{$file->created_at}}</td>
+                                        <td class="text-center">{{ $file->original_name }}</td>
+                                        <td class="text-center">{{ $file->year }}</td>
+                                        <td class="text-center">{{ $file->created_at }}</td>
                                         <td class="text-center">
-                                        <a href="{{ route('files.download2020', $file) }}" class="btn btn-sm btn-primary">Download</a>
-                                        <a href="{{ route('files.show2020', $file->id)}}" target="_blank" class="btn btn-sm btn-secondary">Preview</a>
-                                         <form id="delete-form-{{ $file->id }}" action="{{route('files.destroy2020', $file->id)}}" method="POST" style="display:inline">
+                                        <a href="{{ route('files.download2021', $file->id) }}" class="btn btn-sm btn-primary">Download</a>
+                                        <a href="{{ route('files.show2021', $file->id) }}" target="_blank" class="btn btn-sm btn-secondary">Preview</a>
+                                         <form id="delete-form-{{ $file->id }}" action="{{route('files.destroy2021', $file->id)}}" method="POST" style="display:inline">
                                @csrf
                                @method('DELETE')
                                           <button type="button" class="btn btn-sm btn-danger" onclick="confirmDelete({{ $file->id }})">Delete</button>
