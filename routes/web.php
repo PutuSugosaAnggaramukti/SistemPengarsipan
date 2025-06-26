@@ -5,7 +5,11 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\FileController2020;
-use App\Http\Controllers\FileController2021; 
+use App\Http\Controllers\FileController2021;
+use App\Http\Controllers\FileController2022;
+use App\Http\Controllers\FileController2023;
+use App\Http\Controllers\FileController2024;
+use App\Http\Controllers\FileController2025;
 use App\Http\Controllers\DashboardController2020;
 use App\Http\Controllers\ViewPageController;
 use App\Http\Controllers\DashboardController;
@@ -71,13 +75,73 @@ Route::get('/files/{id}/show2021', [FileController2021::class, 'show2021'])->nam
 
 Route::delete('/documents2021/{id}', [FileController2021::class, 'destroy2021'])->name('files.destroy2021');
 
+//ROUTE BERKAS 2022
+Route::get('/files2022', [App\Http\Controllers\FileController2022::class, 'index2022'])
+    ->name('files.index2022');
 
-// Route::get('/files/{file}/delete', [App\Http\Controllers\FileController::class, 'destroy'])
-//     ->name('files.delete');
+Route::get('/files/create2022', [App\Http\Controllers\FileController2022::class, 'create'])
+    ->name('files.create2022');
 
+Route::post('/files/store2022', [App\Http\Controllers\FileController2022::class, 'store2022'])
+    ->name('files.store2022');
 
+Route::get('/files2022/{file}/download', [App\Http\Controllers\FileController2022::class, 'download2022'])
+    ->name('files.download2022');
 
+Route::get('/files/{id}/show2022', [FileController2022::class, 'show2022'])->name('files.show2022');
 
+Route::delete('/documents2022/{id}', [FileController2022::class, 'destroy2022'])->name('files.destroy2022');
+
+//ROUTE BERKAS 2023
+Route::get('/files2023', [App\Http\Controllers\FileController2023::class, 'index2023'])
+    ->name('files.index2023');
+
+Route::get('/files/create2023', [App\Http\Controllers\FileController2023::class, 'create'])
+    ->name('files.create2023');
+
+Route::post('/files/store2023', [App\Http\Controllers\FileController2023::class, 'store2023'])
+    ->name('files.store2023');
+
+Route::get('/files2023/{file}/download', [App\Http\Controllers\FileController2023::class, 'download2023'])
+    ->name('files.download2023');
+
+Route::get('/files/{id}/show2023', [FileController2023::class, 'show2023'])->name('files.show2023');
+
+Route::delete('/documents2023/{id}', [FileController2023::class, 'destroy2023'])->name('files.destroy2023');
+
+//ROUTE BERKAS 2024
+Route::get('/files2024', [App\Http\Controllers\FileController2024::class, 'index2024'])
+    ->name('files.index2024');
+
+Route::get('/files/create2024', [App\Http\Controllers\FileController2024::class, 'create'])
+    ->name('files.create2024');
+
+Route::post('/files/store2024', [App\Http\Controllers\FileController2024::class, 'store2024'])
+    ->name('files.store2024');
+
+Route::get('/files2024/{file}/download', [App\Http\Controllers\FileController2024::class, 'download2024'])
+    ->name('files.download2024');
+
+Route::get('/files/{id}/show2024', [FileController2024::class, 'show2024'])->name('files.show2024');
+
+Route::delete('/documents2024/{id}', [FileController2024::class, 'destroy2024'])->name('files.destroy2024');
+
+//ROUTE DASHBOARD 2025
+Route::get('/files2025', [App\Http\Controllers\FileController2025::class, 'index2025'])
+    ->name('files.index2025');
+
+Route::get('/files/create2025', [App\Http\Controllers\FileController2025::class, 'create'])
+    ->name('files.create2025');
+
+Route::post('/files/store2025', [App\Http\Controllers\FileController2025::class, 'store2025'])
+    ->name('files.store2025');
+
+Route::get('/files2025/{file}/download', [App\Http\Controllers\FileController2025::class, 'download2025'])
+    ->name('files.download2025');
+
+Route::get('/files/{id}/show2025', [FileController2025::class, 'show2025'])->name('files.show2025');
+
+Route::delete('/documents2025/{id}', [FileController2025::class, 'destroy2025'])->name('files.destroy2025');
 
 
 // Show the login form

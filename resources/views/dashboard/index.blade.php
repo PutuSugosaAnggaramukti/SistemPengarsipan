@@ -83,7 +83,7 @@
                 </div>
             </div>
         </a>
-        <a href="" class="rounded-lg">
+        <a href="/files2022" class="rounded-lg">
             <div class="bg-[#0012cf] rounded-lg p-4 hover:bg-blue-500">
                 <div class="flex flex-column items-center">
                     <i class="fa fa-book fa-2x text-[white]"></i>
@@ -91,7 +91,7 @@
                 </div>
             </div>
         </a>
-        <a href="" class="rounded-lg">
+        <a href="/files2023" class="rounded-lg">
             <div class="bg-[#0012cf] rounded-lg p-4 hover:bg-blue-500">
                 <div class="flex flex-column items-center">
                     <i class="fa fa-book fa-2x text-[white]"></i>
@@ -99,7 +99,7 @@
                 </div>
             </div>
         </a>
-        <a href="" class="rounded-lg">
+        <a href="/files2024" class="rounded-lg">
             <div class="bg-[#0012cf] rounded-lg p-4 hover:bg-blue-500">
                 <div class="flex flex-column items-center">
                     <i class="fa fa-book fa-2x text-[white]"></i>
@@ -107,7 +107,7 @@
                 </div>
             </div>
         </a>
-        <a href="" class="rounded-lg">
+        <a href="/files2025" class="rounded-lg">
             <div class="bg-[#0012cf] rounded-lg p-4 hover:bg-blue-500">
                 <div class="flex flex-column items-center">
                     <i class="fa fa-book fa-2x text-[white]"></i>
