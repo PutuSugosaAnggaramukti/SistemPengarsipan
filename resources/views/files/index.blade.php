@@ -160,7 +160,7 @@ function confirmLogout(event) {
                                         
                                         <td class="text-center">{{$file->original_name}}</td>
                                         <td class="text-center">{{$file->year}}</td>
-                                        <td class="text-center">{{$file->created_at}}</td>
+                                        <td class="text-center">{{$file->created_at->format('d-m-Y')}}</td>
                                         <td class="text-center">
                                         <a href="{{ route('files.download', $file) }}" class="btn btn-sm btn-primary">Download</a>
                                         <a href="{{ route('files.show', $file->id)}}" target="_blank" class="btn btn-sm btn-secondary">Preview</a>
