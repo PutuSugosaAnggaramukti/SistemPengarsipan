@@ -4,7 +4,7 @@
   <meta charset="utf-8"/>
   <meta content="width=device-width, initial-scale=1" name="viewport"/>
   <title>
-   Sistem Informasi Pengarsipan
+   2019
   </title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -145,9 +145,7 @@ function confirmLogout(event) {
    </div>
    
     <table class="table">
-                            
                                 <tr>
-                                   
                                     <th class="text-center">Nama File</th>
                                     <th class="text-center">Tahun</th>
                                     <th class="text-center">Tanggal Upload</th>
@@ -173,21 +171,10 @@ function confirmLogout(event) {
                                         
                                     </tr>
                                @endforeach
-                                    
-                            
                             </tbody>
                         </table>
                       {{ $files->links() }}
                         <br>
-    {{-- <div class="flex flex-col flex-row-reverse"">
-    <ul class="pagination">
-    <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-    <li class="page-item"><a class="page-link" href="#">1</a></li>
-    <li class="page-item"><a class="page-link" href="#">2</a></li>
-    <li class="page-item"><a class="page-link" href="#">3</a></li>
-    <li class="page-item"><a class="page-link" href="#">Next</a></li>
-  </ul>
-    </div><br> --}}
   </main>
  </body>
 </html>
