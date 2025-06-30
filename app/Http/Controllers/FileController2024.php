@@ -28,31 +28,29 @@ class FileController2024
 
      public function store2024(Request $request)
     {
-        $request->validate([
-        'year' => 'required|digits:4|integer|min:2000|max:' . now()->year,
-        'files' => 'required',
-        'files.*' => 'mimes:pdf|max:204800',
+        $validated = $request->validate([
+        'year' => 'required|numeric',
+        'files.*' => 'required|file|mimes:pdf|max:204800',
     ]);
 
-    $year = $request->year;
+    $year = $validated['year'];
 
     if ($request->hasFile('files')) {
         foreach ($request->file('files') as $file) {
-            if ($file) {
-                $filename = time() . '_' . $file->getClientOriginalName();
-                $path = $file->storeAs("public/documents/{$year}", $filename);
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $path = $file->storeAs("public/documents/{$year}", $filename);
 
-                Tahun2024::create([
-                    'original_name' => $file->getClientOriginalName(),
-                    'generated_name' => $filename,
-                    'filepath2024' => $path,
-                    'year' => $year,
-                ]);
-            }
+            Tahun2024::create([
+                'original_name' => $file->getClientOriginalName(),
+                'generated_name' => $filename,
+                'filepath2024' => $path,
+                'year' => $year,
+            ]);
         }
     }
 
-    return back()->with('success', 'PDF documents uploaded successfully.');
+    return back()->with('success', 'Files uploaded successfully!');
+
 
     // ✅ Debug check
     //dd($file->toArray());

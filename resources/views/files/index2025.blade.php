@@ -14,9 +14,56 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter&amp;display=swap" rel="stylesheet"/>
   <style>
-   body {
-      font-family: 'Inter', sans-serif;
-    }
+    body {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+}
+
+.form-container {
+  max-width: 400px;
+  margin: auto;
+}
+
+label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: bold;
+}
+
+input[type="text"], input[type="file"] {
+  width: 100%;
+  padding: 8px 12px;
+  margin-bottom: 15px;
+  border: 2px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
+  transition: border-color 0.3s;
+}
+
+input[type="text"]:focus, input[type="file"]:focus {
+  border-color: #3498db;
+  outline: none;
+}
+
+button {
+  background-color: #3498db;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #2980b9;
+}
+
+.note {
+  margin-bottom: 20px;
+  color: #555;
+}
   </style>
   <script>
 function confirmDelete(id) {
@@ -52,7 +99,11 @@ function confirmLogout(event) {
             document.getElementById('logout-form').submit();
         }
     });
-} 
+}
+document.addEventListener("DOMContentLoaded", function() {
+  const yearInput = document.getElementById("year");
+  yearInput.value = 2025;
+});
 </script> 
  </head>
  <body class="bg-white text-black">
@@ -108,31 +159,20 @@ function confirmLogout(event) {
       <!-- Modal body -->
       <div class="modal-body">
          <div class="pt-8 px-6 pb-6">
-          <h1>Maksimal file 200MB</h1>
+         <div class="note">Maksimal file 200MB</div>
 
- <form action="{{ route('files.store2025') }}" method="POST" enctype="multipart/form-data">
-                           
-   @csrf
-    <label>Year:</label>
-    <input type="number" name="year" min="2000" max="{{ date('Y') }}" required>
+<form action="{{ route('files.store2025') }}" method="POST" enctype="multipart/form-data">
 
-    <label>PDF Documents:</label>
-    <input type="file" name="files[]" multiple accept="application/pdf">
-    {{-- <button type="submit">Upload</button> --}}
-    {{-- <script>
-        Swal.fire({
-            icon: 'warning',
-            title: 'File too large!',
-            text: '{{ $errors->first('file') }}'
-        });
-    </script> --}}
+@csrf
+  <label for="year">Year:</label>
+  <input type="text" id="year" name="year" min="2000" max="{{ date('Y') }}" placeholder="Enter year" value="2025" readonly style="background-color:#eee;">
 
-                            
+  <label for="pdf">Choose PDF files:</label>
+  <input type="file" name="files[]" multiple accept="application/pdf">
 
-                            <button type="submit" class="btn btn-md btn-primary me-3">Upload</button>
-
-                        </form> 
-         </div>
+  <button class="btn btn-sm btn-primary" type="submit">Upload</button>
+</form>
+</div>
       </div>
     </div>
   </div>
