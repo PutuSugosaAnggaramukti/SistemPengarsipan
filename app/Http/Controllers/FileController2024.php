@@ -20,10 +20,10 @@ class FileController2024
                   ->orWhere('generated_name', 'like', "%{$search}%");
         })
         ->orderBy('created_at', 'desc')
-        ->paginate(10); // Optional: for pagination
+        ->paginate(10)
+        ->withQueryString(); // Keeps the ?search= on pagination links
 
-       $files = Tahun2024::where('original_name', 'like', "%{$search}%")->paginate(10);
-        return view('files.index2024', compact('files','search'));
+    return view('files.index2024', compact('files', 'search'));
     }
 
      public function store2024(Request $request)
@@ -60,16 +60,17 @@ class FileController2024
 
      public function show2024($id)
     {
-       $file = Tahun2024::findOrFail($id);
+      $file = Tahun2024::withTrashed()->findOrFail($id);
+
+    if ($file->trashed()) {
+        abort(404, 'This file has been deleted.');
+    }
 
     if (!$file->filepath2024 || !Storage::exists($file->filepath2024)) {
         abort(404, 'File not found.');
     }
 
-    // Get file content
     $fileContent = Storage::get($file->filepath2024);
-
-    // Get file mime type (optional fallback)
     $mimeType = Storage::mimeType($file->filepath2024) ?? 'application/pdf';
 
     return new Response($fileContent, 200, [
@@ -80,10 +81,10 @@ class FileController2024
 
      public function destroy2024($id)
     {
-       $file = Tahun2024::findOrFail($id);
+      $file = Tahun2024::withTrashed()->findOrFail($id);
 
-    if (!empty($file->filepath2024) && Storage::exists($file->filepath2024)) {
-        Storage::delete($file->filepath2024);
+    if ($file->trashed()) {
+        abort(404, 'This file is already deleted.');
     }
 
     $file->delete();
@@ -93,7 +94,11 @@ class FileController2024
 
     public function download2024($id)
     {
-        $file = Tahun2024::findOrFail($id);
+      $file = Tahun2024::withTrashed()->findOrFail($id);
+
+    if ($file->trashed()) {
+        abort(404, 'This file has been deleted.');
+    }
 
     if (!$file->filepath2024 || !Storage::exists($file->filepath2024)) {
         abort(404, 'File not found.');
@@ -101,4 +106,19 @@ class FileController2024
 
     return Storage::download($file->filepath2024, $file->original_name);
     }
+
+    public function restore2024($id)
+    {
+    $file = Tahun2024::withTrashed()->findOrFail($id);
+    $file->restore();
+
+    return back()->with('success', 'File restored successfully!');
+    }
+
+    public function restoreAll2024()
+    {
+    Tahun2024::onlyTrashed()->restore(); // restores ALL soft deleted files
+    return back()->with('success', 'All deleted files have been restored!');
+    }
+
 }

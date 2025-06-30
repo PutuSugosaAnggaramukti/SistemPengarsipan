@@ -69,7 +69,6 @@ button:hover {
 function confirmDelete(id) {
     Swal.fire({
         title: 'Yakin ingin menghapus?',
-        text: "File anda akan terhapus secara permanen!",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#d33',
@@ -143,6 +142,12 @@ document.addEventListener("DOMContentLoaded", function() {
     <a href="/dashboard"><button class="flex items-center space-x-2 bg-indigo-700 hover:bg-indigo-800 text-white rounded-full px-5 py-2 text-sm font-medium shadow-md " type="button">
     Kembali
    </button></a>
+   <form action="{{ route('files.restoreAll2023') }}" method="POST">
+        @csrf
+        <button type="submit" class="btn btn-success">
+            Restore
+        </button>
+    </form>
     </section>
    
     <!-- Modal Upload Berkas  -->
@@ -206,9 +211,11 @@ document.addEventListener("DOMContentLoaded", function() {
                                           <button type="button" class="btn btn-sm btn-danger" onclick="confirmDelete({{ $file->id }})">Delete</button>
                                         </form>
                                         </td>
-                                        
-                                    </tr>
-                            @endforeach
+                                     @empty
+                                  <tr>
+                                      <td colspan="4" class="text-center">No files found.</td>
+                                  </tr>
+                              @endforelse
                             </tbody>
                         </table>
                          {{ $files->links() }}

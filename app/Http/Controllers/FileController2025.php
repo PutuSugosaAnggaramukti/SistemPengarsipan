@@ -12,7 +12,7 @@ class FileController2025
 {
      public function index2025(Request $request)
     {
-        $search = $request->input('search');
+         $search = $request->input('search');
 
         $files = Tahun2025::query()
         ->when($search, function ($query, $search) {
@@ -20,10 +20,10 @@ class FileController2025
                   ->orWhere('generated_name', 'like', "%{$search}%");
         })
         ->orderBy('created_at', 'desc')
-        ->paginate(10); // Optional: for pagination
+        ->paginate(10)
+        ->withQueryString(); // Keeps the ?search= on pagination links
 
-       $files = Tahun2025::where('original_name', 'like', "%{$search}%")->paginate(10);
-        return view('files.index2025', compact('files','search'));
+    return view('files.index2025', compact('files', 'search'));
     }
 
      public function store2025(Request $request)
@@ -59,16 +59,17 @@ class FileController2025
 
      public function show2025($id)
     {
-       $file = Tahun2025::findOrFail($id);
+      $file = Tahun2025::withTrashed()->findOrFail($id);
+
+    if ($file->trashed()) {
+        abort(404, 'This file has been deleted.');
+    }
 
     if (!$file->filepath2025 || !Storage::exists($file->filepath2025)) {
         abort(404, 'File not found.');
     }
 
-    // Get file content
     $fileContent = Storage::get($file->filepath2025);
-
-    // Get file mime type (optional fallback)
     $mimeType = Storage::mimeType($file->filepath2025) ?? 'application/pdf';
 
     return new Response($fileContent, 200, [
@@ -79,10 +80,10 @@ class FileController2025
 
      public function destroy2025($id)
     {
-       $file = Tahun2025::findOrFail($id);
+      $file = Tahun2025::withTrashed()->findOrFail($id);
 
-    if (!empty($file->filepath2025) && Storage::exists($file->filepath2025)) {
-        Storage::delete($file->filepath2025);
+    if ($file->trashed()) {
+        abort(404, 'This file is already deleted.');
     }
 
     $file->delete();
@@ -92,7 +93,11 @@ class FileController2025
 
     public function download2025($id)
     {
-        $file = Tahun2025::findOrFail($id);
+    $file = Tahun2025::withTrashed()->findOrFail($id);
+
+    if ($file->trashed()) {
+        abort(404, 'This file has been deleted.');
+    }
 
     if (!$file->filepath2025 || !Storage::exists($file->filepath2025)) {
         abort(404, 'File not found.');
@@ -100,4 +105,20 @@ class FileController2025
 
     return Storage::download($file->filepath2025, $file->original_name);
     }
+
+     public function restore2025($id)
+    {
+    $file = Tahun2025::withTrashed()->findOrFail($id);
+    $file->restore();
+
+    return back()->with('success', 'File restored successfully!');
+    }
+
+    public function restoreAll2025()
+    {
+    Tahun2025::onlyTrashed()->restore(); // restores ALL soft deleted files
+    return back()->with('success', 'All deleted files have been restored!');
+    }
+
+
 }

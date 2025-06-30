@@ -20,10 +20,10 @@ class FileController2020
                   ->orWhere('generated_name', 'like', "%{$search}%");
         })
         ->orderBy('created_at', 'desc')
-        ->paginate(10); // Optional: for pagination
+        ->paginate(10)
+        ->withQueryString(); // Keeps the ?search= on pagination links
 
-       $files = Tahun2020::where('original_name', 'like', "%{$search}%")->paginate(10);
-        return view('files.index2020', compact('files','search'));
+    return view('files.index2020', compact('files', 'search'));
     }
 
      public function store2020(Request $request)
@@ -58,16 +58,17 @@ class FileController2020
     
      public function show2020($id)
     { 
-       $file = Tahun2020::findOrFail($id);
+       $file = Tahun2020::withTrashed()->findOrFail($id);
+
+    if ($file->trashed()) {
+        abort(404, 'This file has been deleted.');
+    }
 
     if (!$file->filepath || !Storage::exists($file->filepath)) {
         abort(404, 'File not found.');
     }
 
-    // Get file content
     $fileContent = Storage::get($file->filepath);
-
-    // Get file mime type (optional fallback)
     $mimeType = Storage::mimeType($file->filepath) ?? 'application/pdf';
 
     return new Response($fileContent, 200, [
@@ -78,10 +79,10 @@ class FileController2020
 
      public function destroy2020($id)
     {
-       $file = Tahun2020::findOrFail($id);
+        $file = Tahun2020::withTrashed()->findOrFail($id);
 
-    if (!empty($file->filepath) && Storage::exists($file->filepath)) {
-        Storage::delete($file->filepath);
+    if ($file->trashed()) {
+        abort(404, 'This file is already deleted.');
     }
 
     $file->delete();
@@ -91,7 +92,11 @@ class FileController2020
 
     public function download2020($id)
     {
-        $file = Tahun2020::findOrFail($id);
+       $file = Tahun2020::withTrashed()->findOrFail($id);
+
+    if ($file->trashed()) {
+        abort(404, 'This file has been deleted.');
+    }
 
     if (!$file->filepath || !Storage::exists($file->filepath)) {
         abort(404, 'File not found.');
@@ -99,4 +104,19 @@ class FileController2020
 
     return Storage::download($file->filepath, $file->original_name);
     }
+
+    public function restore2020($id)
+    {
+    $file = Tahun2020::withTrashed()->findOrFail($id);
+    $file->restore();
+
+    return back()->with('success', 'File restored successfully!');
+    }
+
+    public function restoreAll2020()
+    {
+    Tahun2020::onlyTrashed()->restore(); // restores ALL soft deleted files
+    return back()->with('success', 'All deleted files have been restored!');
+    }
+
 }

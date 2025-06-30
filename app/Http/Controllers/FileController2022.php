@@ -11,19 +11,19 @@ use Illuminate\Http\Request;
 class FileController2022
 {
      public function index2022(Request $request)
-    {
+    {   
         $search = $request->input('search');
 
-        $files = Tahun2022::query()
+        $files = Tahun2022::query() // ✅ this is the key change
         ->when($search, function ($query, $search) {
-            $query->where('original_name', 'like', "%{$search}%")
-                  ->orWhere('generated_name', 'like', "%{$search}%");
-        })
+        $query->where('original_name', 'like', "%{$search}%")
+              ->orWhere('generated_name', 'like', "%{$search}%");
+    })
         ->orderBy('created_at', 'desc')
-        ->paginate(10); // Optional: for pagination
+        ->paginate(10)
+        ->withQueryString();
 
-       $files = Tahun2022::where('original_name', 'like', "%{$search}%")->paginate(10);
-        return view('files.index2022', compact('files','search'));
+        return view('files.index2022', compact('files', 'search'));
     }
 
      public function store2022(Request $request)
@@ -59,16 +59,17 @@ class FileController2022
     
      public function show2022($id)
     { 
-       $file = Tahun2022::findOrFail($id);
+        $file = Tahun2022::withTrashed()->findOrFail($id);
+
+    if ($file->trashed()) {
+        abort(404, 'This file has been deleted.');
+    }
 
     if (!$file->filepath2022 || !Storage::exists($file->filepath2022)) {
         abort(404, 'File not found.');
     }
 
-    // Get file content
     $fileContent = Storage::get($file->filepath2022);
-
-    // Get file mime type (optional fallback)
     $mimeType = Storage::mimeType($file->filepath2022) ?? 'application/pdf';
 
     return new Response($fileContent, 200, [
@@ -79,10 +80,10 @@ class FileController2022
 
      public function destroy2022($id)
     {
-       $file = Tahun2022::findOrFail($id);
+        $file = Tahun2022::withTrashed()->findOrFail($id);
 
-    if (!empty($file->filepath2022) && Storage::exists($file->filepath2022)) {
-        Storage::delete($file->filepath2022);
+    if ($file->trashed()) {
+        abort(404, 'This file is already deleted.');
     }
 
     $file->delete();
@@ -92,12 +93,30 @@ class FileController2022
 
     public function download2022($id)
     {
-        $file = Tahun2022::findOrFail($id);
+    $file = Tahun2022::withTrashed()->findOrFail($id);
+
+    if ($file->trashed()) {
+        abort(404, 'This file has been deleted.');
+    }
 
     if (!$file->filepath2022 || !Storage::exists($file->filepath2022)) {
         abort(404, 'File not found.');
     }
 
     return Storage::download($file->filepath2022, $file->original_name);
+    }
+
+    public function restore2022($id)
+    {
+    $file = Tahun2022::withTrashed()->findOrFail($id);
+    $file->restore();
+
+    return back()->with('success', 'File restored successfully!');
+    }
+
+    public function restoreAll()
+    {
+    Tahun2022::onlyTrashed()->restore(); // restores ALL soft deleted files
+    return back()->with('success', 'All deleted files have been restored!');
     }
 }

@@ -20,10 +20,10 @@ class FileController2021
                   ->orWhere('generated_name', 'like', "%{$search}%");
         })
         ->orderBy('created_at', 'desc')
-        ->paginate(10); // Optional: for pagination
+        ->paginate(10)
+        ->withQueryString(); // Keeps the ?search= on pagination links
 
-       $files = Tahun2021::where('original_name', 'like', "%{$search}%")->paginate(10);
-        return view('files.index2021', compact('files','search'));
+    return view('files.index2021', compact('files', 'search'));
     }
 
      public function store2021(Request $request)
@@ -59,16 +59,17 @@ class FileController2021
     
      public function show2021($id)
     { 
-       $file = Tahun2021::findOrFail($id);
+       $file = Tahun2021::withTrashed()->findOrFail($id);
+
+    if ($file->trashed()) {
+        abort(404, 'This file has been deleted.');
+    }
 
     if (!$file->filepath2021 || !Storage::exists($file->filepath2021)) {
         abort(404, 'File not found.');
     }
 
-    // Get file content
     $fileContent = Storage::get($file->filepath2021);
-
-    // Get file mime type (optional fallback)
     $mimeType = Storage::mimeType($file->filepath2021) ?? 'application/pdf';
 
     return new Response($fileContent, 200, [
@@ -79,10 +80,10 @@ class FileController2021
 
      public function destroy2021($id)
     {
-       $file = Tahun2021::findOrFail($id);
+      $file = Tahun2021::withTrashed()->findOrFail($id);
 
-    if (!empty($file->filepath2021) && Storage::exists($file->filepath2021)) {
-        Storage::delete($file->filepath2021);
+    if ($file->trashed()) {
+        abort(404, 'This file is already deleted.');
     }
 
     $file->delete();
@@ -100,4 +101,20 @@ class FileController2021
 
     return Storage::download($file->filepath2021, $file->original_name);
     }
+
+     public function restore2021($id)
+    {
+    $file = Tahun2021::withTrashed()->findOrFail($id);
+    $file->restore();
+
+    return back()->with('success', 'File restored successfully!');
+    }
+
+    public function restoreAll2021()
+    {
+    Tahun2021::onlyTrashed()->restore(); // restores ALL soft deleted files
+    return back()->with('success', 'All deleted files have been restored!');
+    }
+
+
 }

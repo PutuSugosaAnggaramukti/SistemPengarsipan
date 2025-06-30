@@ -41,6 +41,9 @@ Route::get('/files/{id}/show', [FileController::class, 'show'])->name('files.sho
 
 Route::delete('/documents/{id}', [FileController::class, 'destroy'])->name('files.destroy');
 
+Route::post('/files/{id}/restore', [FileController::class, 'restore2019'])->name('files.restore2019');
+Route::post('/files/restoreallfiles', [FileController::class, 'restoreAllFiles'])->name('files.restoreAllFiles');
+
 //ROUTE BERKAS 2020
 Route::get('/files2020', [App\Http\Controllers\FileController2020::class, 'index2020'])
     ->name('files.index2020');
@@ -57,6 +60,9 @@ Route::get('/files2020/{file}/download', [App\Http\Controllers\FileController202
 Route::get('/files/{id}/show2020', [FileController2020::class, 'show2020'])->name('files.show2020');
 
 Route::delete('/documents2020/{id}', [FileController2020::class, 'destroy2020'])->name('files.destroy2020');
+Route::post('/files/{id}/restore', [FileController2020::class, 'restore2020'])->name('files.restore2020');
+Route::post('/files/restoreall2020', [FileController2020::class, 'restoreAll2020'])->name('files.restoreAll2020');
+
 
 //ROUTE BERKAS 2021
 Route::get('/files2021', [App\Http\Controllers\FileController2021::class, 'index2021'])
@@ -74,6 +80,9 @@ Route::get('/files2021/{file}/download', [App\Http\Controllers\FileController202
 Route::get('/files/{id}/show2021', [FileController2021::class, 'show2021'])->name('files.show2021');
 
 Route::delete('/documents2021/{id}', [FileController2021::class, 'destroy2021'])->name('files.destroy2021');
+Route::post('/files/{id}/restore', [FileController2021::class, 'restore2021'])->name('files.restore2021');
+Route::post('/files/restoreall2021', [FileController2021::class, 'restoreAll2021'])->name('files.restoreAll2021');
+
 
 //ROUTE BERKAS 2022
 Route::get('/files2022', [App\Http\Controllers\FileController2022::class, 'index2022'])
@@ -84,6 +93,9 @@ Route::get('/files/create2022', [App\Http\Controllers\FileController2022::class,
 
 Route::post('/files/store2022', [App\Http\Controllers\FileController2022::class, 'store2022'])
     ->name('files.store2022');
+
+Route::post('/files/{id}/restore', [FileController2022::class, 'restore2022'])->name('files.restore2022');
+Route::post('/files/restore-all', [FileController2022::class, 'restoreAll'])->name('files.restoreAll');
 
 Route::get('/files2022/{file}/download', [App\Http\Controllers\FileController2022::class, 'download2022'])
     ->name('files.download2022');
@@ -108,6 +120,9 @@ Route::get('/files2023/{file}/download', [App\Http\Controllers\FileController202
 Route::get('/files/{id}/show2023', [FileController2023::class, 'show2023'])->name('files.show2023');
 
 Route::delete('/documents2023/{id}', [FileController2023::class, 'destroy2023'])->name('files.destroy2023');
+Route::post('/files/{id}/restore', [FileController2023::class, 'restore2023'])->name('files.restore2023');
+Route::post('/files/restoreall2023', [FileController2023::class, 'restoreAll2023'])->name('files.restoreAll2023');
+
 
 //ROUTE BERKAS 2024
 Route::get('/files2024', [App\Http\Controllers\FileController2024::class, 'index2024'])
@@ -125,6 +140,10 @@ Route::get('/files2024/{file}/download', [App\Http\Controllers\FileController202
 Route::get('/files/{id}/show2024', [FileController2024::class, 'show2024'])->name('files.show2024');
 
 Route::delete('/documents2024/{id}', [FileController2024::class, 'destroy2024'])->name('files.destroy2024');
+Route::post('/files/{id}/restore', [FileController2024::class, 'restore2024'])->name('files.restore2024');
+Route::post('/files/restoreall2024', [FileController2024::class, 'restoreAll2024'])->name('files.restoreAll2024');
+
+
 
 //ROUTE DASHBOARD 2025
 Route::get('/files2025', [App\Http\Controllers\FileController2025::class, 'index2025'])
@@ -142,6 +161,8 @@ Route::get('/files2025/{file}/download', [App\Http\Controllers\FileController202
 Route::get('/files/{id}/show2025', [FileController2025::class, 'show2025'])->name('files.show2025');
 
 Route::delete('/documents2025/{id}', [FileController2025::class, 'destroy2025'])->name('files.destroy2025');
+Route::post('/files/{id}/restore', [FileController2025::class, 'restore2025'])->name('files.restore2025');
+Route::post('/files/restoreall2025', [FileController2025::class, 'restoreAll2025'])->name('files.restoreAll2025');
 
 
 // Show the login form

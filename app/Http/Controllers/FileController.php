@@ -14,7 +14,8 @@ class FileController
      * Display a listing of the resource.
      */
     public function index(Request $request)
-    {
+    {   
+        
         $search = $request->input('search');
 
         $files = File::query()
@@ -23,10 +24,10 @@ class FileController
                   ->orWhere('generated_name', 'like', "%{$search}%");
         })
         ->orderBy('created_at', 'desc')
-        ->paginate(10); // Optional: for pagination
+        ->paginate(10)
+        ->withQueryString(); // Keeps the ?search= on pagination links
 
-       $files = File::where('original_name', 'like', "%{$search}%")->paginate(10);
-        return view('files.index', compact('files','search'));
+    return view('files.index', compact('files', 'search'));
     }
 
 
@@ -81,16 +82,17 @@ class FileController
      */
     public function show($id)
     { 
-       $file = File::findOrFail($id);
+      $file = File::withTrashed()->findOrFail($id);
+
+    if ($file->trashed()) {
+        abort(404, 'This file has been deleted.');
+    }
 
     if (!$file->file_path || !Storage::exists($file->file_path)) {
         abort(404, 'File not found.');
     }
 
-    // Get file content
     $fileContent = Storage::get($file->file_path);
-
-    // Get file mime type (optional fallback)
     $mimeType = Storage::mimeType($file->file_path) ?? 'application/pdf';
 
     return new Response($fileContent, 200, [
@@ -99,31 +101,13 @@ class FileController
     ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(File $file)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, File $file)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
+   
     public function destroy($id)
     {
-       $file = File::findOrFail($id);
+       $file = File::withTrashed()->findOrFail($id);
 
-    if (!empty($file->file_path) && Storage::exists($file->file_path)) {
-        Storage::delete($file->file_path);
+    if ($file->trashed()) {
+        abort(404, 'This file is already deleted.');
     }
 
     $file->delete();
@@ -133,13 +117,31 @@ class FileController
 
     public function download($id)
     {
-        $file = File::findOrFail($id);
+    $file = File::withTrashed()->findOrFail($id);
+
+    if ($file->trashed()) {
+        abort(404, 'This file has been deleted.');
+    }
 
     if (!$file->file_path || !Storage::exists($file->file_path)) {
         abort(404, 'File not found.');
     }
 
     return Storage::download($file->file_path, $file->original_name);
+    }
+
+      public function restore2019($id)
+    {
+    $file = File::withTrashed()->findOrFail($id);
+    $file->restore();
+
+    return back()->with('success', 'File restored successfully!');
+    }
+
+    public function restoreAllFiles()
+    {
+    File::onlyTrashed()->restore(); // restores ALL soft deleted files
+    return back()->with('success', 'All deleted files have been restored!');
     }
 
 }

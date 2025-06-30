@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('original_name');
             $table->string('generated_name');
             $table->year('year');
+            $table->softDeletes(); // adds deleted_at timestamp
             $table->timestamps();
         });
     }

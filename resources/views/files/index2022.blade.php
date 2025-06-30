@@ -70,7 +70,6 @@ button:hover {
 function confirmDelete(id) {
     Swal.fire({
         title: 'Yakin ingin menghapus?',
-        text: "File anda akan terhapus secara permanen!",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#d33',
@@ -144,6 +143,12 @@ document.addEventListener("DOMContentLoaded", function() {
     <a href="/dashboard"><button class="flex items-center space-x-2 bg-indigo-700 hover:bg-indigo-800 text-white rounded-full px-5 py-2 text-sm font-medium shadow-md " type="button">
     Kembali
    </button></a>
+   <form action="{{ route('files.restoreAll') }}" method="POST">
+        @csrf
+        <button type="submit" class="btn btn-success">
+            Restore 
+        </button>
+    </form>
     </section>
    
     <!-- Modal Upload Berkas  -->
@@ -186,33 +191,38 @@ document.addEventListener("DOMContentLoaded", function() {
 </form>
    </div>
    
-    <table class="table">
-                                <tr>
-                                    <th class="text-center">Nama File</th>
-                                    <th class="text-center">Tahun</th>
-                                    <th class="text-center">Tanggal Upload</th>
-                                    <th class="text-center">Action</th>
-                                </tr>
-                            <tbody>
-                              @forelse ($files as $file)
-                                    <tr>
-                                        <td class="text-center">{{ $file->original_name }}</td>
-                                        <td class="text-center">{{ $file->year }}</td>
-                                        <td class="text-center">{{ $file->created_at->format('d-m-Y') }}</td>
-                                        <td class="text-center">
-                                        <a href="{{ route('files.download2022', $file->id) }}" class="btn btn-sm btn-primary">Download</a>
-                                        <a href="{{ route('files.show2022', $file->id) }}" target="_blank" class="btn btn-sm btn-secondary">Preview</a>
-                                         <form id="delete-form-{{ $file->id }}" action="{{route('files.destroy2022', $file->id)}}" method="POST" style="display:inline">
-                               @csrf
-                               @method('DELETE')
-                                          <button type="button" class="btn btn-sm btn-danger" onclick="confirmDelete({{ $file->id }})">Delete</button>
-                                        </form>
-                                        </td>
-                                        
-                                    </tr>
-                            @endforeach
-                            </tbody>
-                        </table>
+ <table class="table">
+    <tr>
+        <th class="text-center">Nama File</th>
+        <th class="text-center">Tahun</th>
+        <th class="text-center">Tanggal Upload</th>
+        <th class="text-center">Action</th>
+    </tr>
+    <tbody>
+    @forelse ($files as $file)
+        <tr>
+            <td class="text-center">{{ $file->original_name }}</td>
+            <td class="text-center">{{ $file->year }}</td>
+            <td class="text-center">{{ $file->created_at->format('d-m-Y') }}</td>
+            <td class="text-center">
+              <a href="{{route('files.download2022', $file->id)}}" class="btn btn-sm btn-primary">Download</a>
+              <a href="{{route('files.show2022', $file->id)}}" target="_blank" class="btn btn-sm btn-secondary">Preview</a>
+          <form id="delete-form-{{ $file->id }}" action="{{route('files.destroy2022', $file->id)}}" method="POST" style="display:inline;">
+          @csrf
+          @method('DELETE')
+          <button type="button" class="btn btn-sm btn-danger" onclick="confirmDelete({{ $file->id }})">Delete</button>
+          </form>
+               
+            </td>
+        </tr>
+    @empty
+        <tr>
+            <td colspan="4" class="text-center">No files found.</td>
+        </tr>
+    @endforelse
+    </tbody>
+</table>
+
                          {{ $files->links() }}
                         <br>
     {{-- <div class="flex flex-col flex-row-reverse"">
