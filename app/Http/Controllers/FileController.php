@@ -50,7 +50,7 @@ class FileController
     {
          $validated = $request->validate([
         'year' => 'required|numeric',
-        'files.*' => 'required|file|mimes:pdf|max:204800',
+        'files.*' => 'required|file|mimes:pdf|max:512000',
     ]);
 
     $year = $validated['year'];

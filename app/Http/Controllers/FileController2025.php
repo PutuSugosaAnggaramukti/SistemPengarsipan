@@ -29,32 +29,32 @@ class FileController2025
      public function store2025(Request $request)
     {
         $validated = $request->validate([
-        'year' => 'required|numeric',
-        'files.*' => 'required|file|mimes:pdf|max:204800',
-    ]);
+            'year' => 'required|numeric',
+            'files.*' => 'required|file|mimes:pdf|max:512000',
+        ]);
 
-    $year = $validated['year'];
+        $year = $validated['year'];
 
-    if ($request->hasFile('files')) {
-        foreach ($request->file('files') as $file) {
-            $filename = time() . '_' . $file->getClientOriginalName();
-            $path = $file->storeAs("public/documents/{$year}", $filename);
+        if ($request->hasFile('files')) {
+            foreach ($request->file('files') as $file) {
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $path = $file->storeAs("public/documents/{$year}", $filename);
 
-            Tahun2025::create([
-                'original_name' => $file->getClientOriginalName(),
-                'generated_name' => $filename,
-                'filepath2025' => $path,
-                'year' => $year,
-            ]);
+                Tahun2025::create([
+                    'original_name' => $file->getClientOriginalName(),
+                    'generated_name' => $filename,
+                    'filepath2025' => $path,
+                    'year' => $year,
+                ]);
+            }
         }
-    }
 
-    return back()->with('success', 'Files uploaded successfully!');
+        return back()->with('success', 'Files uploaded successfully!');
 
-    // ✅ Debug check
-    //dd($file->toArray());
+        // ✅ Debug check
+        //dd($file->toArray());
 
-    return redirect()->route('files.index2025')->with('success', 'File berhasil diupload');
+        return redirect()->route('files.index2025')->with('success', 'File berhasil diupload');
     }
 
      public function show2025($id)
