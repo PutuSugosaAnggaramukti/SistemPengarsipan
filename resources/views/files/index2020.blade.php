@@ -118,7 +118,7 @@ document.addEventListener("DOMContentLoaded", function() {
      </p>
     </div>
    </div>
-  <form id="logout-form" action="" method="POST" style="display: none;">
+  <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
     @csrf
 </form>
 <a href="#" onclick="confirmLogout(event)"><button class="flex items-center space-x-2 bg-sky-300 hover:bg-sky-400 text-sky-700 rounded-full px-4 py-2 shadow-md text-sm font-medium" type="button">

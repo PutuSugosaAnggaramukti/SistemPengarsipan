@@ -44,13 +44,16 @@
             </div>
         </div>
        <a href="#" onclick="confirmLogout(event)"><button class="flex items-center space-x-2 bg-sky-300 hover:bg-sky-400 text-sky-700 rounded-full px-4 py-2 shadow-md text-sm font-medium" type="button">
-    <i class="fas fa-sign-out-alt">
-    </i>
-    <span>
-     Logout
-    </span>
-   </button></a>
-    </header>
+     <i class="fas fa-sign-out-alt">
+     </i>
+     <span>
+      Logout
+     </span>
+    </button></a>
+    <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
+        @csrf
+    </form>
+     </header>
 
     <main class="mx-4">
         <div class="mb-20">
