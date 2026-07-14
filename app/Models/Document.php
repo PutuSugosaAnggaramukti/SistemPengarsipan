@@ -40,4 +40,9 @@ class Document extends Model
     {
         return $this->nama_document;
     }
+
+    public function getIdAttribute()
+    {
+        return $this->id_document;
+    }
 }
