@@ -164,7 +164,7 @@ document.addEventListener("DOMContentLoaded", function() {
       <!-- Modal body -->
       <div class="modal-body">
          <div class="pt-8 px-6 pb-6">
-         <div class="note">Maksimal file 200MB</div>
+         <div class="note">Maksimal file 500MB</div>
 
 <form action="{{ route('files.store2020') }}" method="POST" enctype="multipart/form-data">
 
