@@ -31,7 +31,7 @@ Sistem Informasi Pengarsipan | Login
    <p class="text-center text-sm mb-8">
     Silahkan Login Untuk Melanjutkan
    </p>
-   <form method="POST" action="{{ route('login') }}">
+   <form method="POST" action="{{ url('/login') }}">
     @csrf
     <label class="block text-xs mb-1" for="username">Username</label>
     <input class="w-full border border-gray-300 rounded-md px-3 py-2 mb-6 text-sm placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-400" name="username"  id="username" placeholder="Username" type="text" required autofocus/>

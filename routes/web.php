@@ -169,7 +169,7 @@ Route::post('/files/restoreall2025', [FileController2025::class, 'restoreAll2025
 Route::get('/', [LoginController::class, 'showLoginForm'])->name('login');
 
 // Handle login submission
-Route::post('/login', [LoginController::class, 'login']);
+Route::post('/login', [LoginController::class, 'login'])->name('login.post');
 
 Route::post('/logout', function () {
     Auth::logout();
