@@ -10,7 +10,6 @@ use App\Models\User;
 class DaftarBerkasController extends Controller
 {
     public function daftarberkaspage(){
-         
         $documents = Document::all();
         return view('documents.index', compact('documents'));
     }

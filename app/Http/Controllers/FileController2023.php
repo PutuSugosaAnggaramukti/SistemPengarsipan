@@ -2,122 +2,66 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\Tahun2023;
+use App\Models\Document;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 
 class FileController2023
 {
-     public function index2023(Request $request)
+    public function index2023(Request $request)
     {
-         $search = $request->input('search');
-
-        $files = Tahun2023::query()
-        ->when($search, function ($query, $search) {
-            $query->where('original_name', 'like', "%{$search}%")
-                  ->orWhere('generated_name', 'like', "%{$search}%");
-        })
-        ->orderBy('created_at', 'desc')
-        ->paginate(10)
-        ->withQueryString(); // Keeps the ?search= on pagination links
-
-    return view('files.index2023', compact('files', 'search'));
+        $search = $request->input('search');
+        $files = Document::query()->where('tahun', '2023')->when($search, function ($q, $s) { $q->where('nama_document', 'like', "%{$s}%"); })->orderBy('created_at', 'desc')->paginate(10)->withQueryString();
+        return view('files.index2023', compact('files', 'search'));
     }
 
-     public function store2023(Request $request)
+    public function store2023(Request $request)
     {
-          $validated = $request->validate([
-        'year' => 'required|numeric',
-        'files.*' => 'required|file|mimes:pdf|max:512000',
-    ]);
-
-    $year = $validated['year'];
-
-    if ($request->hasFile('files')) {
-        foreach ($request->file('files') as $file) {
-            $filename = time() . '_' . $file->getClientOriginalName();
-            $path = $file->storeAs("public/documents/{$year}", $filename);
-
-            Tahun2023::create([
-                'original_name' => $file->getClientOriginalName(),
-                'generated_name' => $filename,
-                'filepath2023' => $path,
-                'year' => $year,
-            ]);
+        $validated = $request->validate(['year' => 'required|numeric', 'files.*' => 'required|file|mimes:pdf|max:512000']);
+        $year = $validated['year'];
+        if ($request->hasFile('files')) {
+            foreach ($request->file('files') as $file) {
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $path = $file->storeAs("uploads/Document/{$year}", $filename, 'public');
+                Document::create(['nomor' => null, 'tanggal' => now(), 'tahun' => $year, 'nama_document' => $file->getClientOriginalName(), 'direktory_document' => $path, 'npp' => auth()->user()->npp ?? 0]);
+            }
         }
+        return back()->with('success', 'Files uploaded successfully!');
     }
 
-    return back()->with('success', 'Files uploaded successfully!');
-
-    // ✅ Debug check
-    //dd($file->toArray());
-
-    return redirect()->route('files.index2023')->with('success', 'File berhasil diupload');
-    }
-
-     public function show2023($id)
+    public function show2023($id)
     {
-        $file = Tahun2023::withTrashed()->findOrFail($id);
-
-    if ($file->trashed()) {
-        abort(404, 'This file has been deleted.');
+        $file = Document::withTrashed()->findOrFail($id);
+        if ($file->trashed() || !$file->direktory_document || !Storage::disk('public')->exists($file->direktory_document)) abort(404);
+        return new Response(Storage::disk('public')->get($file->direktory_document), 200, ['Content-Type' => Storage::disk('public')->mimeType($file->direktory_document) ?? 'application/pdf', 'Content-Disposition' => 'inline; filename="' . $file->nama_document . '"']);
     }
 
-    if (!$file->filepath2023 || !Storage::exists($file->filepath2023)) {
-        abort(404, 'File not found.');
-    }
-
-    $fileContent = Storage::get($file->filepath2023);
-    $mimeType = Storage::mimeType($file->filepath2023) ?? 'application/pdf';
-
-    return new Response($fileContent, 200, [
-        'Content-Type' => $mimeType,
-        'Content-Disposition' => 'inline; filename="' . $file->original_name . '"',
-    ]);
-    }
-
-     public function destroy2023($id)
+    public function destroy2023($id)
     {
-    $file = Tahun2023::withTrashed()->findOrFail($id);
-
-    if ($file->trashed()) {
-        abort(404, 'This file is already deleted.');
-    }
-
-    $file->delete();
-
-    return redirect()->route('files.index2023')->with('success', 'Document deleted successfully.');
+        $file = Document::withTrashed()->findOrFail($id);
+        if ($file->trashed()) abort(404);
+        $file->delete();
+        return redirect()->route('files.index2023')->with('success', 'Document deleted successfully.');
     }
 
     public function download2023($id)
     {
-    $file = Tahun2023::withTrashed()->findOrFail($id);
-
-    if ($file->trashed()) {
-        abort(404, 'This file has been deleted.');
+        $file = Document::withTrashed()->findOrFail($id);
+        if ($file->trashed() || !$file->direktory_document || !Storage::disk('public')->exists($file->direktory_document)) abort(404);
+        return Storage::disk('public')->download($file->direktory_document, $file->nama_document);
     }
 
-    if (!$file->filepath2023 || !Storage::exists($file->filepath2023)) {
-        abort(404, 'File not found.');
-    }
-
-    return Storage::download($file->filepath2023, $file->original_name);
-    }
-
-     public function restore2023($id)
+    public function restore2023($id)
     {
-    $file = Tahun2023::withTrashed()->findOrFail($id);
-    $file->restore();
-
-    return back()->with('success', 'File restored successfully!');
+        $file = Document::withTrashed()->findOrFail($id);
+        $file->restore();
+        return back()->with('success', 'File restored successfully!');
     }
 
     public function restoreAll2023()
     {
-    Tahun2023::onlyTrashed()->restore(); // restores ALL soft deleted files
-    return back()->with('success', 'All deleted files have been restored!');
+        Document::onlyTrashed()->restore();
+        return back()->with('success', 'All deleted files have been restored!');
     }
-
 }
